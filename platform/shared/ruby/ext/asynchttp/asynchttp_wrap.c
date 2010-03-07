@@ -1533,7 +1533,7 @@ static swig_module_info swig_module = {swig_types, 1, 0, 0, 0, 0};
 /* -------- TYPES TABLE (END) -------- */
 
 #define SWIG_init    Init_AsyncHttp
-#define SWIG_name    "AsyncHttp"
+#define SWIG_name    "Rho::AsyncHttp"
 
 static VALUE mAsyncHttp;
 
@@ -2088,7 +2088,8 @@ SWIGEXPORT void Init_AsyncHttp(void) {
   size_t i;
   
   SWIG_InitRuntime();
-  mAsyncHttp = rb_define_module("AsyncHttp");
+  mAsyncHttp = rb_define_module("Rho");
+  mAsyncHttp = rb_define_module_under(mAsyncHttp, "AsyncHttp");
   
   SWIG_InitializeModule(0);
   for (i = 0; i < swig_module.size; i++) {

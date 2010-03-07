@@ -1,5 +1,5 @@
 /* asynchttp.i */
-%module AsyncHttp
+%module "Rho::AsyncHttp"
 %{
 /* Put header files here or function declarations like below */
 	extern void rho_asynchttp_get(const char* url, VALUE headers, const char* callback, const char* callback_params);
