@@ -878,6 +878,7 @@ bool CHttpServer::decide(String const &method, String const &uri, String const &
         VALUE data = callFramework(req);
         
         String reply(getStringFromValue(data), getStringLenFromValue(data));
+        rho_ruby_releaseValue(data);
         if (!send_response(reply))
             return false;
         
@@ -913,6 +914,7 @@ bool CHttpServer::decide(String const &method, String const &uri, String const &
         
         VALUE data = callServeIndex((char *)fullPath.c_str());
         String reply(getStringFromValue(data), getStringLenFromValue(data));
+        rho_ruby_releaseValue(data);
         return send_response(reply);
     }
     //RAWLOG_INFO("Sending File");
