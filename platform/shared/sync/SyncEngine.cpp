@@ -244,7 +244,9 @@ boolean CSyncEngine::resetClientIDByNet(const String& strClientID)//throws Excep
         strQuery += "&" + CClientRegister::getInstance()->getRegisterBody();
     
     NetResponse( resp, getNet().pullData(strUrl+strQuery, this) );
-    if ( resp.isOK() )
+    return resp.isOK();
+
+    /*if ( resp.isOK() )
     {
         if ( CClientRegister::getInstance() != null )
             return CClientRegister::getInstance()->doRegister(*this);
@@ -252,7 +254,7 @@ boolean CSyncEngine::resetClientIDByNet(const String& strClientID)//throws Excep
         return true;
     }
 
-    return false;
+    return false;*/
 }
 
 String CSyncEngine::requestClientIDByNet()
