@@ -119,7 +119,8 @@ const char* rho_rhodesapp_getfirststarturl();
 const char* rho_rhodesapp_getoptionsurl();
 void rho_rhodesapp_keeplastvisitedurl(const char* szUrl);
 const char* rho_rhodesapp_getcurrenturl(int tabindex);
-
+const char* rho_rhodesapp_gethomeurl();
+	
 const char* rho_rhodesapp_getloadingpagepath();
 const char* rho_rhodesapp_getblobsdirpath();
 	

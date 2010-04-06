@@ -452,11 +452,6 @@ const String& CRhodesApp::getStartUrl()
     return m_strStartUrl;
 }
 
-const char* rho_rhodesapp_gethomeurl()
-{
-    return RHODESAPP().getHomeUrl().c_str();
-}
-
 const String& CRhodesApp::getOptionsUrl()
 {
     m_strOptionsUrl = canonicalizeRhoUrl( RHOCONF().getString("options_path") );

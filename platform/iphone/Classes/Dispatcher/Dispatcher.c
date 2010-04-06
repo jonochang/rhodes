@@ -165,7 +165,7 @@ _CallApplication(HttpContextRef context, RouteRef route) {
 		RAWTRACE("Add response to the send buffer");
 		CFDataAppendBytes(context->_sendBytes, (UInt8*)res, (CFIndex)strlen(res));
 		
-		releaseValue(val);
+		rho_ruby_releaseValue(val);
 		return 1;
 	}
 	
@@ -230,7 +230,7 @@ int ServeIndex(HttpContextRef context, char* index_name) {
 		RAWTRACE("Add response to the send buffer");
 		CFDataAppendBytes(context->_sendBytes, (UInt8*)res, (CFIndex)strlen(res));
 		
-		releaseValue(val);
+		rho_ruby_releaseValue(val);
 		return 1;
 	}
 	
