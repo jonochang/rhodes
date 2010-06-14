@@ -595,6 +595,22 @@ namespace "build" do
       cc_ar libname, Dir.glob(objdir + "/**/*.o") or exit 1
     end
 
+    task :libzbar => "config:android" do
+      srcdir = $shareddir
+      objdir = $objdir["zbar"]
+      libname = $libname["zbar"]
+      args = []
+      args << "-I#{srcdir}" 
+      args << "-I#{srcdir}/zbar/include"
+      args << "-I#{srcdir}/zbar"
+      args << "-I#{srcdir}/zbar/decoder"
+      args << "-D__NEW__" if USE_STLPORT
+      args << "-I#{$stlport_includes}" if USE_STLPORT
+
+      cc_build 'libzbar', objdir, args or exit 1
+      cc_ar libname, Dir.glob(objdir + "/**/*.o") or exit 1
+    end
+
     task :libs => [:libsqlite, :libcurl, :libruby, :libjson, :libstlport, :librhodb, :librhocommon, :librhomain, :librhosync, :librholog]
 
     task :genconfig => "config:android" do
@@ -809,6 +825,17 @@ namespace "build" do
           lines << line
         end
       end
+
+      srclist = File.join($builddir, "libzbarJAVA_build.files")
+      File.open(srclist, "r") do |f|
+        while line = f.gets
+          line.chomp!
+          next if line =~ /\/AndroidR\.java\s*$/
+          next if !$use_geomapping and line =~ /\/mapview\//
+          lines << line
+        end
+      end
+
       lines << $app_android_r
       lines << $app_native_libs_java
       if File.exists? File.join($extensionsdir, "ext_build.files")
