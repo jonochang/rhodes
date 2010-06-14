@@ -90,6 +90,7 @@ public:
     void callDateTimeCallback(String strCallbackUrl, long lDateTime, const char* szData, int bCancel );
     void callAppActiveCallback(boolean bActive);
     void callPopupCallback(String strCallbackUrl, const String &id, const String &title);
+    void callBarcodeScanImageCallback(String callbackUrl, const String &result, const String &error, boolean cancel);
 
     CAppMenu& getAppMenu (void) { return m_oAppMenu; }
 	
@@ -173,6 +174,7 @@ int rho_rhodesapp_callPushCallback(const char* szData);
 
 void rho_rhodesapp_callScreenRotationCallback(int width, int height, int degrees);
 void rho_rhodesapp_callPopupCallback(const char *strCallbackUrl, const char *id, const char *title);
+void rho_rhodesapp_callBarcodeScanImageCallback(const char *callbackUrl, const char *result, const char *error, int cancel);
 
 int rho_conf_send_log();
 
