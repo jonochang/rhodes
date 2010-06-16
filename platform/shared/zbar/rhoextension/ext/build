@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cp -r $RHO_ROOT/platform/shared/zbar jni && touch AndroidManifest.xml && $ANDROID_NDK/ndk-build && cp libs/armeabi/libzbarjni.so $TARGET_TEMP_DIR
+cp -r $RHO_ROOT/platform/shared/zbar/java && find `pwd`/java -type f  -fprint $TARGET_TEMP_DIR/ext_build.files
