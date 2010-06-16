@@ -204,6 +204,8 @@ void CRhodesApp::callCameraCallback(String strCallbackUrl, const String& strImag
     NetRequest( getNet().pushData( strCallbackUrl, strBody, null ) );
 }
 
+
+
 void CRhodesApp::callDateTimeCallback(String strCallbackUrl, long lDateTime, const char* szData, int bCancel )
 {
     strCallbackUrl = canonicalizeRhoUrl(strCallbackUrl);
@@ -232,6 +234,27 @@ void CRhodesApp::callPopupCallback(String strCallbackUrl, const String &id, cons
     String strBody = "button_id=" + id + "&button_title=" + title;
     strBody += "&rho_callback=1";
     NetRequest( getNet().pushData( strCallbackUrl, strBody, null ) );
+}
+
+ void CRhodesApp::callBarcodeScanImageCallback(String callbackUrl, 
+					       const String &result, const String &error, 
+					       boolean cancel)
+{
+    callbackUrl = canonicalizeRhoUrl(callbackUrl);
+
+    String body;
+    if ( cancel || error.length() > 0 )
+    {
+        if ( cancel )
+            body = "status=cancel&message=User canceled operation.";
+        else
+            body = "status=error&message=" + error;
+    }else {
+        body = "status=ok&result=" + result;
+    }
+
+    body += "&rho_callback=1";
+    NetRequest( getNet().pushData(callbackUrl, body, null) );
 }
 
 static void callback_syncdb(void *arg, String const &/*query*/ )
@@ -866,6 +889,8 @@ void rho_rhodesapp_callPopupCallback(const char *strCallbackUrl, const char *id,
     RHODESAPP().callPopupCallback(strCallbackUrl, id, title);
 }
 
+
+
 void rho_rhodesapp_callAppActiveCallback(int nActive)
 {
     RHODESAPP().callAppActiveCallback(nActive!=0);
@@ -893,7 +918,14 @@ void rho_rhodesapp_callScreenRotationCallback(int width, int height, int degrees
 {
     if ( !rho::common::CRhodesApp::getInstance() )
         return;
-	RHODESAPP().callScreenRotationCallback(width, height, degrees);
+    RHODESAPP().callScreenRotationCallback(width, height, degrees);
+}
+
+void rho_rhodesapp_callBarcodeScanImageCallback(const char *callbackUrl, const char *result, const char *error, int cancel)
+{
+  if (!rho::common::CRhodesApp::getInstance())
+    return;
+  RHODESAPP().callBarcodeScanImageCallback(callbackUrl, result, error, cancel != 0);
 }
 
 const char* rho_ruby_getErrorText(int nError)
