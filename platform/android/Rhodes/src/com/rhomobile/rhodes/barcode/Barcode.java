@@ -16,6 +16,8 @@ class Barcode {
     
     private static final String TAG = "Barcode";
 
+    private static String m_result;
+
     private static Image convertToImage (Bitmap bitmap) {
 	Bitmap mutable_bitmap = bitmap.copy(Bitmap.Config.RGB_565, true);
 	
@@ -53,7 +55,7 @@ class Barcode {
     }
 
     public static void scanImage (String callback, String filePath) {
-	Log.v(TAG, "scanImage: " + filePath);
+	Log.d(TAG, "scanImage: " + filePath);
        
 	Bitmap bitmap = BitmapFactory.decodeFile(filePath);
 
@@ -72,19 +74,19 @@ class Barcode {
 	try {
 	    scanner  = new ImageScanner();
 	} catch (OutOfMemoryError e) {
-	    callback(callback, "", "Out of memory error", false);
+	    //doCallback(callback, "", "Out of memory error", false);
 	}
 
 	int ret = 0;
 	try {
 	    ret = scanner.scanImage(image);
 	} catch ( UnsupportedOperationException e) {
-	    callback(callback, "", "System error", false);
+	    //doCallback(callback, "", "System error", false);
 	}
 
 	if (ret == 0) {
 	    Logger.E(TAG, "Failed to recognize barcode");
-	    callback(callback, "", "Failed to recognize barcode", false);
+	    //doCallback(callback, "", "Failed to recognize barcode", false);
 	    return;
 	}
 	
@@ -134,17 +136,20 @@ class Barcode {
 	    
 	    result += ":" + sym.getData() + " ";
 	    Log.v(TAG, "scanImage: " + result);
+	    Logger.I(TAG, "scanImage: " + result);
         }
 
 	bitmap.recycle();
 	image.destroy();
 
-	doCallback (callback, result, "", false);	
+	m_result = result;
+
+	//doCallback (callback, result, "", false);
     }
 
     public static void scanImageWithPreview (String callback, String filePath) {
 	//TODO
-	callback (callback, "", "", true);
+	//doCallback (callback, "", "", true);
     }
 
     public static native void doCallback(String callbackUrl, 
