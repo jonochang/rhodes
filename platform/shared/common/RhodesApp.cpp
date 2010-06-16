@@ -240,6 +240,9 @@ void CRhodesApp::callPopupCallback(String strCallbackUrl, const String &id, cons
 					       const String &result, const String &error, 
 					       boolean cancel)
 {
+    if (callbackUrl.length() == 0)
+        return;
+
     callbackUrl = canonicalizeRhoUrl(callbackUrl);
 
     String body;
@@ -254,6 +257,9 @@ void CRhodesApp::callPopupCallback(String strCallbackUrl, const String &id, cons
     }
 
     body += "&rho_callback=1";
+
+    LOG(INFO) + "callBarcodeScanImageCallback: body = " + body;
+
     NetRequest( getNet().pushData(callbackUrl, body, null) );
 }
 

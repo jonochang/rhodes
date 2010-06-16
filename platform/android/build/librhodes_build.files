@@ -1,5 +1,6 @@
 platform/android/Rhodes/jni/src/RhoClassFactory.cpp
 platform/android/Rhodes/jni/src/alert.cpp
+platform/android/Rhodes/jni/src/barcode.cpp
 platform/android/Rhodes/jni/src/callbacks.cpp
 platform/android/Rhodes/jni/src/camera.cpp
 platform/android/Rhodes/jni/src/datetimepicker.cpp
