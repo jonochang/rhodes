@@ -74,19 +74,19 @@ class Barcode {
 	try {
 	    scanner  = new ImageScanner();
 	} catch (OutOfMemoryError e) {
-	    //doCallback(callback, "", "Out of memory error", false);
+	    doCallback(callback, "", "Out of memory error", false);
 	}
 
 	int ret = 0;
 	try {
 	    ret = scanner.scanImage(image);
 	} catch ( UnsupportedOperationException e) {
-	    //doCallback(callback, "", "System error", false);
+	    doCallback(callback, "", "System error", false);
 	}
 
 	if (ret == 0) {
 	    Logger.E(TAG, "Failed to recognize barcode");
-	    //doCallback(callback, "", "Failed to recognize barcode", false);
+	    doCallback(callback, "", "Failed to recognize barcode", false);
 	    return;
 	}
 	
@@ -144,12 +144,12 @@ class Barcode {
 
 	m_result = result;
 
-	//doCallback (callback, result, "", false);
+	doCallback (callback, result, "", false);
     }
 
     public static void scanImageWithPreview (String callback, String filePath) {
 	//TODO
-	//doCallback (callback, "", "", true);
+	doCallback (callback, "", "", true);
     }
 
     public static native void doCallback(String callbackUrl, 
