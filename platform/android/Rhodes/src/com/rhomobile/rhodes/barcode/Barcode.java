@@ -15,10 +15,8 @@ import com.rhomobile.rhodes.Logger;
 import net.sourceforge.zbar.*;
 
 
-class Barcode {
-    
+class Barcode {    
     private static final String TAG = "Barcode";
-
 
     private static Image convertToImage (Bitmap bitmap) {
 	Bitmap mutable_bitmap = bitmap.copy(Bitmap.Config.RGB_565, true);
@@ -57,18 +55,20 @@ class Barcode {
     }
 
     public static void scanImage (String callback, String filePath) {
-	Log.d(TAG, "scanImage: " + filePath);
-       
 	Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+
+	Logger.I(TAG, "Trying to scan image \"" + filePath + "\"");
 
 	if (bitmap == null) {
 	    Logger.E(TAG, "Failed to decode bitmap \"" + filePath + "\"");
+	    doCallback(callback, "", "Failed to decode bitmap.", false);
 	    return;
 	}
 	
 	Image image = convertToImage(bitmap);
 	if (image == null) {
-	    Logger.E(TAG, "Failed to convert bitmap");
+	    Logger.E(TAG, "Failed to convert bitmap \"" + filePath + "\" to greyscale");
+	    doCallback(callback, "", "Failed to convert bitmap.", false);
 	    return;
 	}
 
@@ -76,6 +76,7 @@ class Barcode {
 	try {
 	    scanner  = new ImageScanner();
 	} catch (OutOfMemoryError e) {
+	    Logger.E(TAG, "Failed to create image scanner - out of memory error");
 	    doCallback(callback, "", "Out of memory error", false);
 	}
 
@@ -83,11 +84,12 @@ class Barcode {
 	try {
 	    ret = scanner.scanImage(image);
 	} catch ( UnsupportedOperationException e) {
+	    Logger.E(TAG, "Failed to scan image - system error");
 	    doCallback(callback, "", "System error", false);
 	}
 
 	if (ret == 0) {
-	    Logger.E(TAG, "Failed to recognize barcode");
+	    Logger.E(TAG, "Failed to recognize barcode - bogus image");
 	    doCallback(callback, "", "Failed to recognize barcode", false);
 	    return;
 	}
@@ -137,8 +139,7 @@ class Barcode {
 	    }
 	    
 	    result += ":" + sym.getData() + " ";
-	    Log.v(TAG, "scanImage: " + result);
-	    Logger.I(TAG, "scanImage: " + result);
+	    Logger.I(TAG, "scanImage result: " + result);
         }
 
 	bitmap.recycle();
@@ -152,16 +153,15 @@ class Barcode {
 	doCallback (callback, "", "", true);
     }
 
-    public static native void doCallback(String callbackUrl, 
-					 String result, String error, boolean cancelled);
+
 
     private static class RunCallback implements Runnable {
-	String callbackUrl;
-	String resultMsg;
-	String errorMsg;
+	String callbackUrl, resultMsg, errorMsg;
 	boolean isCancelled;
 
-	public RunCallback (String callback, String result, String error, boolean cancelled) {
+	public RunCallback (String callback, String result, String error, 
+			    boolean cancelled) 
+	{
 	    callbackUrl = callback;
 	    resultMsg   = result;
 	    errorMsg    = error;
@@ -172,4 +172,7 @@ class Barcode {
 	    doCallback (callbackUrl, resultMsg, errorMsg, isCancelled);
 	} 
     }
+
+    public static native void doCallback(String callbackUrl, 
+					 String result, String error, boolean cancelled);
 }

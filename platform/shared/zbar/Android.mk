@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := zbarjni
+LOCAL_MODULE    := libzbarjni
 LOCAL_SRC_FILES := config.c \
 	error.c \
 	symbol.c \
@@ -27,4 +27,14 @@ LOCAL_SRC_FILES := config.c \
 	zbarjni.c \
 	rhoextension_init.c
 
+#include $(BUILD_STATIC_LIBRARY)
 include $(BUILD_SHARED_LIBRARY)
+
+#include $(CLEAR_VARS)
+#
+#LOCAL_MODULE    := libzbarjni-fake
+#LOCAL_SRC_FILES := empty.c
+
+#LOCAL_STATIC_LIBRARIES := libzbarjni
+
+#include $(BUILD_SHARED_LIBRARY)
