@@ -1,22 +1,24 @@
 package com.rhomobile.rhodes.barcode;
 
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import net.sourceforge.zbar.*;
+import android.util.Log;
 
+import com.rhomobile.rhodes.Rhodes;
 import com.rhomobile.rhodes.Logger;
 
-import android.util.Log;
+import net.sourceforge.zbar.*;
+
 
 class Barcode {
     
     private static final String TAG = "Barcode";
 
-    private static String m_result;
 
     private static Image convertToImage (Bitmap bitmap) {
 	Bitmap mutable_bitmap = bitmap.copy(Bitmap.Config.RGB_565, true);
@@ -142,9 +144,7 @@ class Barcode {
 	bitmap.recycle();
 	image.destroy();
 
-	m_result = result;
-
-	doCallback (callback, result, "", false);
+	Rhodes.performOnUiThread(new RunCallback (callback, result, "", false), false);
     }
 
     public static void scanImageWithPreview (String callback, String filePath) {
@@ -153,6 +153,23 @@ class Barcode {
     }
 
     public static native void doCallback(String callbackUrl, 
-					 String result, String error, 
-					 boolean cancelled);
+					 String result, String error, boolean cancelled);
+
+    private static class RunCallback implements Runnable {
+	String callbackUrl;
+	String resultMsg;
+	String errorMsg;
+	boolean isCancelled;
+
+	public RunCallback (String callback, String result, String error, boolean cancelled) {
+	    callbackUrl = callback;
+	    resultMsg   = result;
+	    errorMsg    = error;
+	    isCancelled = cancelled;
+	}
+
+	public void run() {
+	    doCallback (callbackUrl, resultMsg, errorMsg, isCancelled);
+	} 
+    }
 }
