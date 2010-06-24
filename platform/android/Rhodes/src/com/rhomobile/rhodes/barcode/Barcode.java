@@ -154,6 +154,9 @@ class Barcode {
     }
 
 
+    public static void scanCamera (String callback) {
+	//TODO
+    }
 
     private static class RunCallback implements Runnable {
 	String callbackUrl, resultMsg, errorMsg;

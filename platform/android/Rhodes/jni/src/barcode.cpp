@@ -36,5 +36,14 @@ RHO_GLOBAL void rho_barcode_scan_image(const char* callback_url, const char *fil
 
 RHO_GLOBAL void rho_barcode_scan_camera(const char* callback_url)
 {
-  //TODO
+  JNIEnv *env = jnienv();
+  jclass cls = getJNIClass(RHODES_JAVA_CLASS_BARCODE);
+  if (!cls) return;
+  jmethodID mid = getJNIClassStaticMethod(env, cls, "scanCamera", "(Ljava/lang/String;)V");
+  if (!mid) return;
+  
+  jstring jstrCallbackUrl = rho_cast<jstring>(callback_url);
+  
+  env->CallStaticVoidMethod(cls, mid, jstrCallbackUrl);
+  env->DeleteLocalRef(jstrCallbackUrl);
 }
